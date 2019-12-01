@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import {api} from '../http-commons.js'
+    import axios from 'axios'
     export default {
         name: 'HelloWorld',
         props: {
@@ -21,9 +21,12 @@
         },
         methods : {
             printHelloMessage: function() {
-                api("hello").then(responce => {
+
+                axios.get("api/hello")
+                    .then(responce => {
                     this.helloMessage = responce.data.msg;
-                })
+                    })
+                    .catch(error => {this.helloMessage = error})
             }
         }
     }

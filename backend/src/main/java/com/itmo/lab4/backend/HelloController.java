@@ -1,5 +1,6 @@
 package com.itmo.lab4.backend;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -8,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(path = "/api")
 public class HelloController {
 
-    @RequestMapping(path = "/hello")
+    @GetMapping(path = "/hello")
     public Object getHelloMessage(){
 
         return new Object(){
