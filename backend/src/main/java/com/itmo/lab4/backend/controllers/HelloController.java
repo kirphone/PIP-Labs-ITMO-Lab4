@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/hello")
 public class HelloController {
 
-    @GetMapping(path = "/hello")
+    @GetMapping
     public Object getHelloMessage(){
 
         return new Object(){

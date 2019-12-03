@@ -1,15 +1,18 @@
 <template>
     <div id="app">
         <header-info/>
+        <login-and-registration/>
     </div>
 </template>
 
 <script>
     import HeaderInfo from "./components/HeaderInfo";
+    import LoginAndRegistration from "./components/LoginAndRegistration";
 
     export default {
         name: 'app',
         components: {
+            LoginAndRegistration,
             HeaderInfo
         },
         methods: {}
