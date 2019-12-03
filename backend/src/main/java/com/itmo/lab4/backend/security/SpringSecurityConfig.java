@@ -1,5 +1,6 @@
 package com.itmo.lab4.backend.security;
 
+import com.itmo.lab4.backend.database.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,12 +20,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private RestAuthenticationEntryPoint authenticationEntryPoint;
 
+    @Bean
+    public MyUserDetailsService userDetailsService() {
+        return new MyUserDetailsService();
+    };
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
+        auth.userDetailsService(userDetailsService()).passwordEncoder(encoder());
+                /*inMemoryAuthentication()
                 .withUser("admin").password(encoder().encode("admin")).roles("ADMIN")
                 .and()
-                .withUser("user").password(encoder().encode("user")).roles("USER");
+                .withUser("user").password(encoder().encode("user")).roles("USER");*/
     }
 
     @Bean
