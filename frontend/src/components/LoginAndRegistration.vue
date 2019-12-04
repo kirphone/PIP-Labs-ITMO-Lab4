@@ -5,13 +5,18 @@
             <a href="#" class="registration" v-on:click="makeActive('registration')">Регистрация</a>
         </nav>
 
-        <p>You chose <b>{{ active }}</b></p>
+        <login-and-registration-form v-bind:form-name="active"/>
     </div>
 </template>
 
 <script>
+    import loginAndRegistrationForm from "./loginAndRegistrationForm";
+
     export default {
         name: "LoginAndRegistration",
+        components: {
+          loginAndRegistrationForm
+        },
         data() {
             return {
                 active: "login",
@@ -45,7 +50,7 @@
 
     nav{
         display:inline-block;
-        margin:60px auto 45px;
+        margin:40px auto 0px;
         background-color:#5597b4;
         box-shadow:0 1px 1px #ccc;
         border-radius:2px;

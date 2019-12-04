@@ -1,0 +1,103 @@
+<template>
+    <form>
+        <div align="center">
+            <h3 v-if="formName === 'login'">Форма входа</h3>
+            <h3 v-else>Форма регистрации</h3>
+        </div>
+        <div class="form-row">
+            <input type="text" id="login" name="login" required> <label for="login">Имя пользователя</label>
+        </div>
+        <div class="form-row">
+            <input type="password" id="password" name="password" required> <label for="password">Пароль</label>
+        </div>
+
+        <div v-if="formName === 'registration'" class="form-row">
+            <input type="password" id="confirmPassword" name="conformPassword" required> <label for="confirmPassword">Подтвердите пароль</label>
+        </div>
+
+        <div class="submit-row">
+            <input type="submit" v-bind:value="formName === 'login' ? 'Вход' : 'Регистрация'">
+        </div>
+    </form>
+</template>
+
+<script>
+    export default {
+        name: "loginAndRegistrationForm",
+        props: {
+            formName: String
+        }
+    }
+</script>
+
+<style scoped>
+    form {
+        background: white;
+        max-width: 350px;
+        margin: 20px auto 30px;
+        padding: 50px 30px 30px;
+    }
+
+    form h3{
+        color: #4a90e2;
+        font-size: 30px;
+        margin: 0 0 40px;
+    }
+
+    .form-row{
+        position: relative;
+        padding-bottom: 40px;
+    }
+
+    .form-row input {
+        display: block;
+        line-height: 40px;
+        width: 100%;
+        padding: 0 10px;
+        background: none;
+        border-width: 0;
+        border-bottom: 2px solid #4a90e2;
+        transition: all 0.2s ease;
+    }
+
+    .form-row label {
+        position: absolute;
+        left: 13px;
+        color: #9d959d;
+        font-size: 20px;
+        font-weight: 300;
+        transform: translateY(-35px);
+        transition: all 0.2s ease;
+    }
+
+    .form-row input:focus{
+        outline: 0;
+        border-color: #F77A52;
+    }
+
+    .form-row input:focus+label,
+    .form-row input:valid+label {
+        transform: translateY(-60px);
+        margin-left: -14px;
+        font-size: 14px;
+        font-weight: 400;
+        outline: 0;
+        border-color: #F77A52;
+        color: #F77A52;
+    }
+
+    .submit-row{
+        padding-top: 10px;
+        margin: 0;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        padding: 0;
+        line-height: 40px;
+        background: #4a90e2;
+        border-width: 0;
+        color: white;
+        font-size: 20px;
+    }
+</style>
