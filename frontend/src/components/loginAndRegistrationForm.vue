@@ -5,10 +5,10 @@
             <h3 v-else>Форма регистрации</h3>
         </div>
         <div class="form-row">
-            <input type="text" id="login" name="login" required> <label for="login">Имя пользователя</label>
+            <input v-model="login" type="text" id="login" name="login" required> <label for="login">Имя пользователя</label>
         </div>
         <div class="form-row">
-            <input type="password" id="password" name="password" required> <label for="password">Пароль</label>
+            <input v-model="password" type="password" id="password" name="password" required> <label for="password">Пароль</label>
         </div>
 
         <div v-if="formName === 'registration'" class="form-row">
@@ -26,6 +26,18 @@
         name: "loginAndRegistrationForm",
         props: {
             formName: String
+        },
+        data : function(){
+            return {
+                password : "",
+                login : ""
+            }
+        },
+        watch: {
+            formName: function () {
+                this.password = "";
+                this.login = "";
+            }
         }
     }
 </script>
