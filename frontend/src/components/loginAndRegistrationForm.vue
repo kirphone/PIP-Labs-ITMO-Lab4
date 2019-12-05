@@ -1,18 +1,25 @@
 <template>
-    <form>
+    <form @submit="validateForm">
         <div align="center">
             <h3 v-if="formName === 'login'">Форма входа</h3>
             <h3 v-else>Форма регистрации</h3>
         </div>
         <div class="form-row">
-            <input v-model="login" type="text" id="login" name="login" required> <label for="login">Имя пользователя</label>
+            <input v-model="login" type="text" id="login" name="login" maxlength="30" required>
+            <label for="login">Имя пользователя</label>
         </div>
         <div class="form-row">
-            <input v-model="password" type="password" id="password" name="password" required> <label for="password">Пароль</label>
+            <input v-model="password" type="password" id="password" name="password" maxlength="50" required>
+            <label for="password">Пароль</label>
         </div>
 
         <div v-if="formName === 'registration'" class="form-row">
-            <input type="password" id="confirmPassword" name="conformPassword" required> <label for="confirmPassword">Подтвердите пароль</label>
+            <input v-model="confirmPassword" type="password" id="confirmPassword" name="confirmPassword" maxlength="50" required>
+            <label for="confirmPassword">Подтвердите пароль</label>
+        </div>
+
+        <div class="error-row" align="left">
+            <label :hidden="isErrorMessageHidden">{{ errorMessageValue }}</label>
         </div>
 
         <div class="submit-row">
@@ -30,13 +37,35 @@
         data : function(){
             return {
                 password : "",
-                login : ""
+                login : "",
+                confirmPassword : "",
+                isErrorMessageHidden : true,
+                errorMessageValue : ""
             }
         },
         watch: {
             formName: function () {
                 this.password = "";
                 this.login = "";
+                this.confirmPassword = "";
+                this.isErrorMessageHidden = true;
+            }
+        },
+        methods: {
+            validateForm: function (e) {
+                if(!/^[a-z]{1}[a-z\d]*$/i.test(this.login))
+                    this.errorMessageValue = "Логин может состоять из латинских букв и цифр, но не может начинаться с цифры";
+                else if(!/^[a-z\d]*$/i.test(this.password))
+                    this.errorMessageValue = "Пароль может состоять из латинских букв и цифр";
+                else if(this.password !== this.confirmPassword)
+                    this.errorMessageValue = "Пароли не совпадают";
+                else {
+                    this.isErrorMessageHidden = true;
+                    return;
+                }
+
+                this.isErrorMessageHidden = false;
+                e.preventDefault();
             }
         }
     }
@@ -96,6 +125,13 @@
         outline: 0;
         border-color: #F77A52;
         color: #F77A52;
+    }
+
+    .error-row label{
+        font-size: 18px
+        !important;
+        color: red
+        !important;
     }
 
     .submit-row{
