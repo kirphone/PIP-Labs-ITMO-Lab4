@@ -1,6 +1,7 @@
 package com.itmo.lab4.backend.database.entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "USERS")
@@ -15,6 +16,9 @@ public class User {
 
     @Column(name = "PASSWORD", nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Collection<PointEntity> points;
 
     public String getPassword() {
         return password;
@@ -38,5 +42,13 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Collection<PointEntity> getPoints() {
+        return points;
+    }
+
+    public void setPoints(Collection<PointEntity> points) {
+        this.points = points;
     }
 }

@@ -27,7 +27,7 @@
             makeActive: function (item) {
                 this.active = item;
             }
-        }
+        },
     }
 </script>
 

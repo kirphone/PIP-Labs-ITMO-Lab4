@@ -1,5 +1,5 @@
 <template>
-    <form @submit="validateForm">
+    <form action="" @submit="validateForm">
         <div align="center">
             <h3 v-if="formName === 'login'">Форма входа</h3>
             <h3 v-else>Форма регистрации</h3>
@@ -29,6 +29,9 @@
 </template>
 
 <script>
+
+    import axios from 'axios'
+
     export default {
         name: "loginAndRegistrationForm",
         props: {
@@ -57,11 +60,27 @@
                     this.errorMessageValue = "Логин может состоять из латинских букв и цифр, но не может начинаться с цифры";
                 else if(!/^[a-z\d]*$/i.test(this.password))
                     this.errorMessageValue = "Пароль может состоять из латинских букв и цифр";
-                else if(this.password !== this.confirmPassword)
+                else if(this.formName === "registration" && this.password !== this.confirmPassword)
                     this.errorMessageValue = "Пароли не совпадают";
                 else {
                     this.isErrorMessageHidden = true;
-                    return;
+                    axios.get("api/login", {
+                        withCredentials : true,
+                        auth : {
+                            username : this.login,
+                            password : this.password
+                        }
+                    })
+                        .then(() => {
+                            this.$router.push("home");
+                        })
+                        .catch(error => {
+                            if(error.response.status === 401){
+                                this.errorMessageValue = "Неверный логин или пароль";
+                            } else
+                                this.errorMessageValue = error;
+                            this.isErrorMessageHidden = false;
+                        })
                 }
 
                 this.isErrorMessageHidden = false;

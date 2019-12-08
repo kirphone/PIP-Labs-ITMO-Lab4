@@ -15,7 +15,9 @@
             LoginAndRegistration,
             HeaderInfo
         },
-        methods: {}
+        methods: {
+
+        }
     }
 </script>
 
