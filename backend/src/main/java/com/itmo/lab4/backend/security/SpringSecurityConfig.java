@@ -37,7 +37,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
-    }
+    }  // rounds = 10
 
     @Bean
     public SimpleUrlAuthenticationFailureHandler authenticationFailureHandler(){
