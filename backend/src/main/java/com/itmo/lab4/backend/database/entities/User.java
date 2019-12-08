@@ -1,10 +1,16 @@
 package com.itmo.lab4.backend.database.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "USERS")
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class User {
 
     @Id
@@ -18,7 +24,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private Collection<PointEntity> points;
+    private List<PointEntity> points;
 
     public String getPassword() {
         return password;
@@ -44,11 +50,11 @@ public class User {
         this.username = username;
     }
 
-    public Collection<PointEntity> getPoints() {
+    public List<PointEntity> getPoints() {
         return points;
     }
 
-    public void setPoints(Collection<PointEntity> points) {
+    public void setPoints(List<PointEntity> points) {
         this.points = points;
     }
 }

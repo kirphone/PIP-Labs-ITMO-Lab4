@@ -1,5 +1,9 @@
 package com.itmo.lab4.backend.database.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -7,6 +11,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "POINTS", schema = "S224907")
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIgnoreProperties("user")
 public class PointEntity implements Serializable {
 
     private Double xcoord;
@@ -15,22 +21,24 @@ public class PointEntity implements Serializable {
 
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @Column(name = "ISHIT")
     private String isHit;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "REQUESTDATE")
     private Date requestDate;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
