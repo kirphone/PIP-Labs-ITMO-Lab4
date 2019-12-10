@@ -80,7 +80,6 @@ public class PointsController {
         }
         long pointId = pointRepository.save(PointEntity.builder().xcoord(point.getX()).ycoord(point.getY())
         .radius(point.getRadius()).user(user.get()).requestDate(new Date()).isHit("YES").build()).getId();
-        ResponseEntity re = new ResponseEntity(HttpStatus.CREATED);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Location", "/" + pointId);
         return new ResponseEntity(responseHeaders, HttpStatus.CREATED);

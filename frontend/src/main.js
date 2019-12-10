@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from "vue-router"
 import App from './App.vue'
-import Home from "./components/Home";
-import LoginAndRegistration from "./components/LoginAndRegistration";
+import Home from "./components/home/Home";
+import LoginAndRegistration from "./components/auth/LoginAndRegistration";
 import NotFoundError from "./components/NotFoundError";
 
 Vue.config.productionTip = false;
@@ -25,13 +25,13 @@ const router = new VueRouter({
         {
             path: '/home',
             name: "home",
-            component: Home,
-            beforeEnter: (to, from, next) => {
+            component: Home
+            /*beforeEnter: (to, from, next) => {
                 if (localStorage.getItem("token") !== null)
                     next();
                 else
                     next("/auth");
-            }
+            }*/
         },
         {
             path: "/",

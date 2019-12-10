@@ -20,6 +20,8 @@
 </script>
 
 <style>
+    @import url("assets/css/form.css");
+
     @font-face {
         font-family: ElMessiri;
         src: url('assets/fonts/ElMessiri-Bold.ttf');

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import loginAndRegistrationForm from "./loginAndRegistrationForm";
+    import loginAndRegistrationForm from "./LoginAndRegistrationForm";
 
     export default {
         name: "LoginAndRegistration",
