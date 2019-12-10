@@ -4,6 +4,7 @@ import com.itmo.lab4.backend.database.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,12 +19,18 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private RestAuthenticationEntryPoint authenticationEntryPoint;
+    private JwtConfigurer jwtConfigurer;
 
     @Bean
     public MyUserDetailsService userDetailsService() {
         return new MyUserDetailsService();
     };
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -48,14 +55,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .httpBasic()
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .and()
+                .httpBasic().disable()
+                //.authenticationEntryPoint(authenticationEntryPoint)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/registration").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/auth/signin", "/auth/register").permitAll()
+                .anyRequest().authenticated().and()
+                .apply(jwtConfigurer);
                // .antMatchers("/api/admin/**").hasRole("ADMIN")
 
     }

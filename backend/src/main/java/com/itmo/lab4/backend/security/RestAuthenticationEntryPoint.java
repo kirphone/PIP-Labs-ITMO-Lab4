@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 
 @Component
 public final class RestAuthenticationEntryPoint
-        extends BasicAuthenticationEntryPoint {
+        implements AuthenticationEntryPoint {
 
     @Override
     public void commence(
@@ -24,11 +24,5 @@ public final class RestAuthenticationEntryPoint
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         PrintWriter writer = response.getWriter();
         writer.println("HTTP Status 401 - " + authException.getMessage());
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        setRealmName("My page");
-        super.afterPropertiesSet();
     }
 }
