@@ -1,6 +1,6 @@
 <template>
     <div class="header-info">
-        <div id="option"><h2>Вариант 13258</h2></div>
+        <div id="option"><h2>Вариант 31111</h2></div>
         <div id="fio"><h2>Буланов Кирилл, группа P3212</h2></div>
     </div>
 </template>
