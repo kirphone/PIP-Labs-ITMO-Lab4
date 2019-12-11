@@ -33,10 +33,10 @@
         <text x="160" y="216.5" class="mR2">-R/2</text>
         <text x="160" y="279" class="mR">-R</text>
 
-        <path d="M 87.5 150 A 62.5 62.5, 90, 0, 0, 150 212.5 L 150 150 Z"
+        <path d="M 25 150 A 125 125, 90, 0, 0, 150 275 L 150 150 Z"
               fill="orange" fill-opacity="0.7" stroke="#4a90e2"></path>
 
-        <polygon points="150 150, 212.5 150, 150 87.5"
+        <polygon points="150 150, 212.5 150, 150 275"
                  fill="purple" fill-opacity="0.7" stroke="#4a90e2"></polygon>
 
         <rect x="87.5" y="25" width="62.5" height="125" fill="yellow" fill-opacity="0.7" stroke="#4a90e2"></rect>
