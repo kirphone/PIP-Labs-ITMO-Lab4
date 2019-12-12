@@ -68,6 +68,8 @@
 
                     if(this.formName === "login"){
                         this.processLogin();
+                    } else{
+                        this.processRegister();
                     }
                 }
 
@@ -100,10 +102,7 @@
                         this.$router.push("home");
                     })
                     .catch(error => {
-                        if (error.response.status === 401) {
-                            this.errorMessageValue = "Неверный логин или пароль";
-                        } else
-                            this.errorMessageValue = error;
+                        this.errorMessageValue = error.response.data;
                         this.isErrorMessageHidden = false;
                     })
             }

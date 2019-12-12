@@ -61,7 +61,7 @@ public class AuthController {
     @PostMapping("/registration")
     public ResponseEntity register(@RequestBody AuthenticationRequest data) {
         String username = data.getUsername();
-        if (!userRepository.findByUsername(username).isPresent()) {
+        if (userRepository.findByUsername(username).isPresent()) {
             throw new UserAlreadyExistException();
         }
         userRepository.save(User.builder().username(username)
