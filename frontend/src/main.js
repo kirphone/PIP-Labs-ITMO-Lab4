@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from "vue-router"
 import App from './App.vue'
-import Home from "./components/home/Home";
+import Home from "./components/home/HomePage";
 import LoginAndRegistration from "./components/auth/LoginAndRegistration";
 import NotFoundError from "./components/NotFoundError";
 

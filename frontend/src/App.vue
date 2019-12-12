@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import HeaderInfo from "./components/HeaderInfo";
+    import HeaderInfo from "./components/BaseHeader";
 
     export default {
         name: 'app',

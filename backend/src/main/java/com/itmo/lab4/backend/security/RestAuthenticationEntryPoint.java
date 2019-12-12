@@ -1,5 +1,7 @@
 package com.itmo.lab4.backend.security;
 
+import com.itmo.lab4.backend.security.exceptions.UserAlreadyExistException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
@@ -21,8 +23,13 @@ public final class RestAuthenticationEntryPoint
             AuthenticationException authException) throws IOException {
 
         //response.addHeader("WWW-Authenticate", "Basic realm=" + getRealmName() + "");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        if(authException instanceof UserAlreadyExistException){
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
+        } else response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+
+
         PrintWriter writer = response.getWriter();
-        writer.println("HTTP Status 401 - " + authException.getMessage());
+        writer.println(authException.getMessage());
     }
 }

@@ -3,6 +3,7 @@ package com.itmo.lab4.backend.controllers;
 import com.itmo.lab4.backend.database.UserRepository;
 import com.itmo.lab4.backend.database.entities.User;
 import com.itmo.lab4.backend.security.JwtTokenProvider;
+import com.itmo.lab4.backend.security.exceptions.UserAlreadyExistException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,36 +40,34 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<Map<Object, Object>> signin(@RequestBody AuthenticationRequest data) {
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             //String token = jwtTokenProvider.createToken(username, this.users.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
-            String token = jwtTokenProvider.createToken(username, new ArrayList<String>(){{add("User");}});
+            String token = jwtTokenProvider.createToken(username, new ArrayList<String>() {{
+                add("User");
+            }});
             Map<Object, Object> model = new HashMap<>();
             model.put("username", username);
             model.put("token", token);
             return ok(model);
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username/password supplied");
+            throw new BadCredentialsException("Invalid username/password");
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping("/registration")
     public ResponseEntity register(@RequestBody AuthenticationRequest data) {
-        try {
-            String username = data.getUsername();
-            if(userRepository.findByUsername(username).isPresent()){
-                return new ResponseEntity("User already exist", HttpStatus.CONFLICT);
-            }
-            userRepository.save(User.builder().username(username)
-                    .password(new BCryptPasswordEncoder().encode(data.getPassword())).build());
-
-            return ok("Registration complete");
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username/password supplied");
+        String username = data.getUsername();
+        if (!userRepository.findByUsername(username).isPresent()) {
+            throw new UserAlreadyExistException();
         }
+        userRepository.save(User.builder().username(username)
+                .password(new BCryptPasswordEncoder().encode(data.getPassword())).build());
+
+        return ok("Registration complete");
     }
 }
 
@@ -76,7 +75,7 @@ public class AuthController {
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-class AuthenticationRequest{
+class AuthenticationRequest {
 
     private String username;
     private String password;
