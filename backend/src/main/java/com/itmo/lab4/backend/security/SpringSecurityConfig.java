@@ -21,6 +21,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtConfigurer jwtConfigurer;
 
+    @Autowired
+    private RestAuthenticationEntryPoint authenticationEntryPoint;
+
     @Bean
     public MyUserDetailsService userDetailsService() {
         return new MyUserDetailsService();
@@ -56,6 +59,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .httpBasic().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
                 //.authenticationEntryPoint(authenticationEntryPoint)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

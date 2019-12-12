@@ -64,12 +64,9 @@
                     this.errorMessageValue = "Пароли не совпадают";
                 else {
                     this.isErrorMessageHidden = true;
-                    axios.get("api/login", {
-                        withCredentials : true,
-                        auth : {
-                            username : this.login,
-                            password : this.password
-                        }
+                    axios.post("api/auth/signin", {
+                            "username" : this.login,
+                            "password" : this.password
                     })
                         .then(() => {
                             this.$router.push("home");
