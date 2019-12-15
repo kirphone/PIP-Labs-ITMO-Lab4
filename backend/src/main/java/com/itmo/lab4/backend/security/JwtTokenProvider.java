@@ -32,6 +32,7 @@ public class JwtTokenProvider {
 
     @Autowired
     private MyUserDetailsService userDetailsService;
+
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(jwtProperties.getSecretKey().getBytes());
@@ -76,19 +77,12 @@ public class JwtTokenProvider {
 
 }
 
-class InvalidJwtAuthenticationException extends AuthenticationException {
-
-    public InvalidJwtAuthenticationException(String e) {
-        super(e);
-    }
-}
-
 @Configuration
 @ConfigurationProperties(prefix = "jwt")
 @Data
 class JwtProperties {
 
-    private String secretKey = "OzxTZc3M+gXsBA2OUvPU/KaL/cd9F9MRCpVkqpWb8xo=";       //Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private String secretKey = "OzxTZc3M+gXsBA2OUvPU/KaL/cd9F9MRCpVkqpWb8xo="; //Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     //validity in milliseconds
     private long validityInMs = 3600000; // 1h

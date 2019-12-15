@@ -5,16 +5,16 @@
             <h3 v-else>Форма регистрации</h3>
         </div>
         <div class="form-row">
-            <input v-model="login" type="text" id="login" name="login" maxlength="30" required>
+            <input v-model="login" type="text" id="login" maxlength="30" required>
             <label for="login">Имя пользователя</label>
         </div>
         <div class="form-row">
-            <input v-model="password" type="password" id="password" name="password" maxlength="50" required>
+            <input v-model="password" type="password" id="password" maxlength="50" required>
             <label for="password">Пароль</label>
         </div>
 
         <div v-if="formName === 'registration'" class="form-row">
-            <input v-model="confirmPassword" type="password" id="confirmPassword" name="confirmPassword" maxlength="50"
+            <input v-model="confirmPassword" type="password" id="confirmPassword" maxlength="50"
                    required>
             <label for="confirmPassword">Подтвердите пароль</label>
         </div>
@@ -81,7 +81,8 @@
                     "username": this.login,
                     "password": this.password
                 })
-                    .then(() => {
+                    .then(response => {
+                        localStorage.setItem("token", response.data.token);
                         this.$router.push("home");
                     })
                     .catch(error => {

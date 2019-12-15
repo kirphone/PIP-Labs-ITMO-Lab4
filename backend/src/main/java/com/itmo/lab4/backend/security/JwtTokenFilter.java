@@ -1,7 +1,9 @@
 package com.itmo.lab4.backend.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -11,10 +13,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Optional;
 
 public class JwtTokenFilter extends GenericFilterBean {
+
+    @Autowired
+    private RestAuthenticationEntryPoint entryPoint;
 
     private JwtTokenProvider jwtTokenProvider;
     public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
@@ -29,18 +33,24 @@ public class JwtTokenFilter extends GenericFilterBean {
             return;
         }
 
-        if (jwtTokenProvider.validateToken(token.get())) {
-            Authentication auth = jwtTokenProvider.getAuthentication(token.get());
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            filterChain.doFilter(req, res);
+        if (!jwtTokenProvider.validateToken(token.get())) {
+            makeResponse((HttpServletResponse)res, HttpServletResponse.SC_UNAUTHORIZED,
+                    "Expired or invalid JWT token");
         } else {
-            handleException(res);
+            Authentication auth = jwtTokenProvider.getAuthentication(token.get());
+            String[] pathParts = ((HttpServletRequest)req).getServletPath().split("/");
+            if(pathParts.length >= 3 && pathParts[1].equals("users") &&
+            !pathParts[2].equals(((UserDetails)auth.getDetails()).getUsername())){
+                makeResponse((HttpServletResponse)res, HttpServletResponse.SC_FORBIDDEN, "This is not your resource");
+            } else {
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                filterChain.doFilter(req, res);
+            }
         }
     }
 
-    private void handleException(ServletResponse response) throws IOException {
-        ((HttpServletResponse)response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        PrintWriter writer = response.getWriter();
-        writer.println("HTTP Status 401 - Expired or invalid JWT token");
+    private void makeResponse(HttpServletResponse response, int httpStatus, String message) throws IOException {
+        response.setStatus(httpStatus);
+        response.getWriter().println(message);
     }
 }

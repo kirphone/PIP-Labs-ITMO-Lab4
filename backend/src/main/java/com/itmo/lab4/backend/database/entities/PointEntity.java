@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -23,8 +24,11 @@ import java.util.Objects;
 @AllArgsConstructor
 public class PointEntity implements Serializable {
 
+    @NotNull
     private Double xcoord;
+    @NotNull
     private Double ycoord;
+    @NotNull
     private Double radius;
 
     @Id

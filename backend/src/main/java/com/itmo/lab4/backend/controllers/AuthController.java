@@ -67,7 +67,7 @@ public class AuthController {
         userRepository.save(User.builder().username(username)
                 .password(new BCryptPasswordEncoder().encode(data.getPassword())).build());
 
-        return ok("Registration complete");
+        return signin(data);
     }
 }
 

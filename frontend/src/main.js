@@ -25,13 +25,13 @@ const router = new VueRouter({
         {
             path: '/home',
             name: "home",
-            component: Home
-            /*beforeEnter: (to, from, next) => {
+            component: Home,
+            beforeEnter: (to, from, next) => {
                 if (localStorage.getItem("token") !== null)
                     next();
                 else
                     next("/auth");
-            }*/
+            }
         },
         {
             path: "/",

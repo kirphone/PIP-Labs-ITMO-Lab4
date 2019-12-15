@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Component
-public final class RestAuthenticationEntryPoint
+public class RestAuthenticationEntryPoint
         implements AuthenticationEntryPoint {
 
     @Override
