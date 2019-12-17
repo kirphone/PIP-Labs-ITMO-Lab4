@@ -1,22 +1,26 @@
 package com.itmo.lab4.backend.controllers;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.itmo.lab4.backend.controllers.request.PointRequest;
 import com.itmo.lab4.backend.database.PointRepository;
 import com.itmo.lab4.backend.database.UserRepository;
 import com.itmo.lab4.backend.database.entities.PointEntity;
 import com.itmo.lab4.backend.database.entities.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.itmo.lab4.backend.validators.PointRequestValidator;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -28,6 +32,9 @@ public class PointsController {
 
     @Autowired
     private PointRepository pointRepository;
+
+    @Autowired
+    private PointRequestValidator pointRequestValidator;
 
     @GetMapping(path = "/{username}/points")
     public ResponseEntity getAll(@PathVariable("username") String username){
@@ -50,8 +57,18 @@ public class PointsController {
     public ResponseEntity addPoint(@PathVariable("username") String username,
                                    @RequestBody PointRequest point){
         User user = userRepository.findByUsername(username).get();
-        long pointId = pointRepository.save(PointEntity.builder().xcoord(point.getX()).ycoord(point.getY())
-        .radius(point.getRadius()).user(user).requestDate(new Date()).isHit("YES").build()).getId();
+
+        DataBinder validationManager = new DataBinder(point);
+        validationManager.addValidators(pointRequestValidator);
+        validationManager.validate();
+        if(validationManager.getBindingResult().hasErrors()) {
+            return new ResponseEntity(validationManager.getBindingResult().getGlobalError().getDefaultMessage(),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        long pointId = pointRepository.save(PointEntity.builder().xcoord(Double.parseDouble(point.getX()))
+                .ycoord(Double.parseDouble(point.getY()))
+        .radius(Double.parseDouble(point.getRadius())).user(user).requestDate(new Date()).isHit("YES").build()).getId();
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Location", "/" + pointId);
         return new ResponseEntity("Point successfully created", responseHeaders, HttpStatus.CREATED);
@@ -64,13 +81,4 @@ public class PointsController {
         return ok("Points successfully deleted");
     }}
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-class PointRequest{
 
-    private Double x;
-    private Double y;
-    private Double radius;
-}

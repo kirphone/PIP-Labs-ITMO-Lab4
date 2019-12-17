@@ -1,6 +1,6 @@
 package com.itmo.lab4.backend.security;
 
-import com.itmo.lab4.backend.security.exceptions.UserAlreadyExistException;
+import com.itmo.lab4.backend.exceptions.UserAlreadyExistException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

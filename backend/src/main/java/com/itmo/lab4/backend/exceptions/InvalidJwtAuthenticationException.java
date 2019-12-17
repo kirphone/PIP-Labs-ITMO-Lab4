@@ -1,4 +1,4 @@
-package com.itmo.lab4.backend.security.exceptions;
+package com.itmo.lab4.backend.exceptions;
 
 import org.springframework.security.core.AuthenticationException;
 
