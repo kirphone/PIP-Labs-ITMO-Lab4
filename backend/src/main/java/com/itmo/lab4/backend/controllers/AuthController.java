@@ -4,18 +4,19 @@ import com.itmo.lab4.backend.database.UserRepository;
 import com.itmo.lab4.backend.database.entities.User;
 import com.itmo.lab4.backend.security.JwtTokenProvider;
 import com.itmo.lab4.backend.security.exceptions.UserAlreadyExistException;
+import com.itmo.lab4.backend.validators.UserValidator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,9 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserValidator userValidator;
 
     @PostMapping("/login")
     public ResponseEntity<Map<Object, Object>> signin(@RequestBody AuthenticationRequest data) {
@@ -64,10 +68,21 @@ public class AuthController {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new UserAlreadyExistException();
         }
-        userRepository.save(User.builder().username(username)
-                .password(new BCryptPasswordEncoder().encode(data.getPassword())).build());
+        User newUser = User.builder().username(username)
+                .password(data.getPassword()).build();
 
-        return signin(data);
+        DataBinder validationManager = new DataBinder(newUser);
+        validationManager.addValidators(userValidator);
+        validationManager.validate();
+        if(validationManager.getBindingResult().hasErrors()){
+            throw new BadCredentialsException(
+                    validationManager.getBindingResult().getFieldError().getDefaultMessage());
+        } else{
+            userRepository.save(User.builder().username(username)
+                    .password(new BCryptPasswordEncoder().encode(data.getPassword())).build());
+
+            return signin(data);
+        }
     }
 }
 

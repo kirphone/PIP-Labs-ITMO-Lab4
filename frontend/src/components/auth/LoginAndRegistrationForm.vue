@@ -57,7 +57,7 @@
         },
         methods: {
             validateForm: function (e) {
-                if (!/^[a-z]{1}[a-z\d]*$/i.test(this.login))
+                if (!/^[a-z][a-z\d]*$/i.test(this.login))
                     this.errorMessageValue = "Логин может состоять из латинских букв и цифр, но не может начинаться с цифры";
                 else if (!/^[a-z\d]*$/i.test(this.password))
                     this.errorMessageValue = "Пароль может состоять из латинских букв и цифр";
