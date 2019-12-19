@@ -1,23 +1,28 @@
 <template>
-    <form>
+    <form @submit.prevent="createPoint">
         <div align="center">
             <h3>Форма ввода данных</h3>
         </div>
         <div class="form-row">
             <input v-model="xValue" type="text" id="xValue" maxlength="10"
-                   @input="validate(xValue, -5, 5)" required>
+                   @input="xValue = validate(xValue, -5, 5); commitPoint();" required>
             <label for="xValue">Координата X</label>
         </div>
         <div class="form-row">
                 <input v-model="yValue" type="text" id="yValue" maxlength="10"
-                       @input="validate(yValue, -5, 5)" required>
+                       @input="yValue = validate(yValue, -5, 5); commitPoint()" required>
             <label for="yValue">Координата Y</label>
         </div>
         <div class="form-row">
             <input v-model="radius" type="text" id="radius" maxlength="10"
-                   @input="validate(radius, -5, 5)" required>
+                   @input="radius = validate(radius, -5, 5); commitPoint();" required>
             <label for="radius">Радиус</label>
         </div>
+
+        <div class="error-row" align="left">
+            <label :hidden="isErrorMessageHidden">{{ errorMessageValue }}</label>
+        </div>
+
         <div class="submit-row">
                 <input type="submit" value="Отправить">
         </div>
@@ -31,8 +36,12 @@
           return{
               xValue : "",
               yValue : "",
-              radius : ""
+              radius : "",
           }
+        },
+        props : {
+            errorMessageValue : String,
+            isErrorMessageHidden : Boolean
         },
         methods :{
             validate : function (input, l, r) {
@@ -50,6 +59,13 @@
                 return input;
                 /*if(input.id == "form:r-spinner_input")
                     drawPoints();*/
+            },
+
+            createPoint : function () {
+                this.$emit("addPoint");
+            },
+            commitPoint : function () {
+                this.$store.commit("setCurrentPoint", {"x" : this.xValue, "y" : this.yValue, "radius" : this.radius});
             }
         }
     }

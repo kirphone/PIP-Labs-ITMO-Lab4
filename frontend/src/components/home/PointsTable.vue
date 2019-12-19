@@ -43,6 +43,7 @@
 
     .results td:not(.header){
         text-align: center;
+        padding-right: 10px;
     }
 
     th{

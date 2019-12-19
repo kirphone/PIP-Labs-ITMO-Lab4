@@ -1,5 +1,5 @@
 <template>
-    <form action="" @submit="validateForm">
+    <form @submit="validateForm">
         <div align="center">
             <h3 v-if="formName === 'login'">Форма входа</h3>
             <h3 v-else>Форма регистрации</h3>
@@ -84,6 +84,7 @@
                             headers : {'Authorization': 'Bearer '+ response.data.token}
                         }).then(response => {
                                 this.$store.commit("setPoints", response.data);
+                                this.$store.commit("setLogin", this.login);
                                 this.$router.push("home");
                             })
                         .catch(error => {

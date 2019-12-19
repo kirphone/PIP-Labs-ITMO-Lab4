@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 public class PointRequestValidator implements Validator {
 
     private static final String BAD_FORMAT_EXCEPTION_MESSAGE = "X, Y coordinates and radius must be given by a number";
-    double R_MAX = 5.0, R_MIN = -5.0, X_MAX = 5.0, X_MIN = -5.0, Y_MAX = 5.0, Y_MIN = -5.0;
+    double R_MAX = 5.0, R_MIN = -5.0;
     private static final String NOT_IN_INTERVAL_EXCEPTION_MESSAGE = "X, Y coordinates and radius must be in the specified interval";
     private static final String TOO_LONG_EXCEPTION_MESSAGE = "X coordinates and radius must be no more than 10 characters";
 
@@ -48,7 +48,7 @@ public class PointRequestValidator implements Validator {
             return;
         }
 
-        if(x > X_MAX || x < X_MIN || y > Y_MAX || y < Y_MIN || radius > R_MAX || radius < R_MIN){
+        if(radius > R_MAX || radius < R_MIN){
             errors.reject("notininterval", NOT_IN_INTERVAL_EXCEPTION_MESSAGE);
         }
     }
