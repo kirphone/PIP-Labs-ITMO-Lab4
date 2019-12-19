@@ -65,42 +65,31 @@
                     this.errorMessageValue = "Пароли не совпадают";
                 else {
                     this.isErrorMessageHidden = true;
-
-                    if(this.formName === "login"){
-                        this.processLogin();
-                    } else{
-                        this.processRegister();
-                    }
+                    this.process(this.formName);
                 }
 
                 this.isErrorMessageHidden = false;
                 e.preventDefault();
             },
-            processLogin: function () {
-                axios.post("api/auth/login", {
+            process : function(loginOrRegistration){
+                axios.post("api/auth/" + loginOrRegistration, {
                     "username": this.login,
                     "password": this.password
                 })
                     .then(response => {
-                        localStorage.setItem("token", response.data.token);
-                        this.$router.push("home");
-                    })
-                    .catch(error => {
-                        /*if (error.response.status === 401) {
-                            this.errorMessageValue = "Неверный логин или пароль";
-                        } else
-                            this.errorMessageValue = error;*/
-                        this.errorMessageValue = error.response.data;
-                        this.isErrorMessageHidden = false;
-                    })
-            },
-            processRegister : function () {
-                axios.post("api/auth/registration", {
-                    "username": this.login,
-                    "password": this.password
-                })
-                    .then(() => {
-                        this.$router.push("home");
+                        this.$store.commit("setToken", response.data.token);
+                        axios({
+                            method : 'get',
+                            url : "api/user/" + this.login + "/points",
+                            headers : {'Authorization': 'Bearer '+ response.data.token}
+                        }).then(response => {
+                                this.$store.commit("setPoints", response.data);
+                                this.$router.push("home");
+                            })
+                        .catch(error => {
+                            this.errorMessageValue = error.response.data;
+                            this.isErrorMessageHidden = false;
+                        })
                     })
                     .catch(error => {
                         this.errorMessageValue = error.response.data;

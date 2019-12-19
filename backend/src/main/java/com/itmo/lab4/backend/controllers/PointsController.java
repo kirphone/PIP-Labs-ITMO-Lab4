@@ -37,48 +37,52 @@ public class PointsController {
     private PointRequestValidator pointRequestValidator;
 
     @GetMapping(path = "/{username}/points")
-    public ResponseEntity getAll(@PathVariable("username") String username){
-        return ok(userRepository.findByUsername(username).get().getPoints());
+    public ResponseEntity getAll(@PathVariable("username") String username) {
+        return ok(userRepository.findByUsername(username).get().getPoints().stream());
     }
 
     @GetMapping(path = "/{username}/points/{point_id}")
     public ResponseEntity getPoint(@PathVariable("username") String username,
-                                   @PathVariable("point_id") Long pointId){
+                                   @PathVariable("point_id") Long pointId) {
         try {
             return ok(userRepository.findByUsername(username).get().getPoints().stream().
                     filter(i -> i.getId().compareTo(pointId) == 0)
                     .collect(Collectors.toList()).get(0));
-        } catch (IndexOutOfBoundsException ex){
+        } catch (IndexOutOfBoundsException ex) {
             return new ResponseEntity("Point does not exist", HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping(path = "/{username}/points")
     public ResponseEntity addPoint(@PathVariable("username") String username,
-                                   @RequestBody PointRequest point){
+                                   @RequestBody PointRequest point) {
         User user = userRepository.findByUsername(username).get();
 
         DataBinder validationManager = new DataBinder(point);
         validationManager.addValidators(pointRequestValidator);
         validationManager.validate();
-        if(validationManager.getBindingResult().hasErrors()) {
+        if (validationManager.getBindingResult().hasErrors()) {
             return new ResponseEntity(validationManager.getBindingResult().getGlobalError().getDefaultMessage(),
                     HttpStatus.BAD_REQUEST);
         }
 
-        long pointId = pointRepository.save(PointEntity.builder().xcoord(Double.parseDouble(point.getX()))
+        PointEntity pointEntity = PointEntity.builder().xcoord(Double.parseDouble(point.getX()))
                 .ycoord(Double.parseDouble(point.getY()))
-        .radius(Double.parseDouble(point.getRadius())).user(user).requestDate(new Date()).isHit("YES").build()).getId();
+                .radius(Double.parseDouble(point.getRadius())).user(user).requestDate(new Date()).build();
+
+        pointEntity.setIsHit();
+        long pointId = pointRepository.save(pointEntity).getId();
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Location", "/" + pointId);
         return new ResponseEntity("Point successfully created", responseHeaders, HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/{username}/points")
-    public ResponseEntity deletePoints(@PathVariable("username") String username){
+    public ResponseEntity deletePoints(@PathVariable("username") String username) {
         User user = userRepository.findByUsername(username).get();
         pointRepository.deleteByUser(user);
         return ok("Points successfully deleted");
-    }}
+    }
+}
 
 

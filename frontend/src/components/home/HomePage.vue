@@ -19,6 +19,11 @@
         components: {
             SvgGrafic,
             PointCreateForm
+        },
+        computed: {
+            token: function () {
+                return this.$store.state.token;
+            }
         }
     }
 </script>

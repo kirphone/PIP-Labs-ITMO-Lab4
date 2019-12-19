@@ -56,6 +56,12 @@ public class PointEntity implements Serializable {
                 Objects.equals(radius, that.radius);
     }
 
+    public void setIsHit(){
+        isHit = xcoord >= 0 && ycoord <= 0 && ycoord >= 2.0 * xcoord - radius ||
+                xcoord <= 0 && ycoord >= 0 && xcoord >= -radius / 2 && ycoord <= radius ||
+                xcoord <= 0 && ycoord <= 0 && xcoord * xcoord + ycoord * ycoord <= radius * radius ? "YES" : "NO";
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(xcoord, ycoord, radius);

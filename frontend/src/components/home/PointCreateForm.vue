@@ -5,17 +5,17 @@
         </div>
         <div class="form-row">
             <input v-model="xValue" type="text" id="xValue" maxlength="10"
-                   @input="validate(this, -5, 5)" required>
+                   @input="validate(xValue, -5, 5)" required>
             <label for="xValue">Координата X</label>
         </div>
         <div class="form-row">
                 <input v-model="yValue" type="text" id="yValue" maxlength="10"
-                       @input="validate(this, -5, 5)" required>
+                       @input="validate(yValue, -5, 5)" required>
             <label for="yValue">Координата Y</label>
         </div>
         <div class="form-row">
             <input v-model="radius" type="text" id="radius" maxlength="10"
-                   @input="validate(this, -5, 5)" required>
+                   @input="validate(radius, -5, 5)" required>
             <label for="radius">Радиус</label>
         </div>
         <div class="submit-row">
@@ -36,17 +36,18 @@
         },
         methods :{
             validate : function (input, l, r) {
-                input.value = input.value.replace(/[^0-9,.-]/g, '').replace(/,/, ".");
-                if (isNaN(input.value) && input.value !== "-")
-                    input.value = "";
-                if (input.value > r)
-                    input.value = r;
-                if (input.value < l) {
-                    input.value = l;
+                input = input.replace(/[^0-9,.-]/g, '').replace(/,/, ".");
+                if (isNaN(input) && input !== "-")
+                    input = "";
+                if (input > r)
+                    input = r;
+                if (input < l) {
+                    input = l;
                 }
-                if (input.value.length > 10) {
-                    input.value = input.value.slice(0, -1);
+                if (input.length > 10) {
+                    input = input.slice(0, -1);
                 }
+                return input;
                 /*if(input.id == "form:r-spinner_input")
                     drawPoints();*/
             }
