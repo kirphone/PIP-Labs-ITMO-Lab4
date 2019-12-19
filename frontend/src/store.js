@@ -17,6 +17,9 @@ const store = new Vuex.Store({
         },
         setPoints(state, pointsArray) {
             state.points = pointsArray;
+        },
+        addPoint(state, point){
+            state.points.appendItem(point);
         }
     },
     plugins: [createPersistedState()]

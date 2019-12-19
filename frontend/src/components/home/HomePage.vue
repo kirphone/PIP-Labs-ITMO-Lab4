@@ -8,15 +8,22 @@
                 <SvgGrafic/>
             </td>
         </tr>
+        <tr>
+            <td colspan="2">
+                <PointsTable/>
+            </td>
+        </tr>
     </table>
 </template>
 
 <script>
     import PointCreateForm from "./PointCreateForm";
     import SvgGrafic from "./SvgGrafic";
+    import PointsTable from "./PointsTable";
     export default {
         name: "Home",
         components: {
+            PointsTable,
             SvgGrafic,
             PointCreateForm
         },
@@ -29,11 +36,5 @@
 </script>
 
 <style scoped>
-#form{
-    float: left;
-}
 
-#svg{
-    float: right;
-}
 </style>
