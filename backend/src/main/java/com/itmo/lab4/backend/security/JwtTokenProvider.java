@@ -35,7 +35,7 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(jwtProperties.getSecretKey().getBytes());
+        secretKey = Base64.getEncoder().encodeToString(jwtProperties.getSecretKey().getEncoded());
     }
     public String createToken(String username, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(username);
@@ -82,7 +82,7 @@ public class JwtTokenProvider {
 @Data
 class JwtProperties {
 
-    private String secretKey = "OzxTZc3M+gXsBA2OUvPU/KaL/cd9F9MRCpVkqpWb8xo="; //Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256); //"OzxTZc3M+gXsBA2OUvPU/KaL/cd9F9MRCpVkqpWb8xo=";
 
     //validity in milliseconds
     private long validityInMs = 3600000; // 1h
