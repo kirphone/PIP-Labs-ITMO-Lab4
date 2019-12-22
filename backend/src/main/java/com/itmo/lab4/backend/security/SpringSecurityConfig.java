@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 @EnableWebSecurity
 @Configuration
@@ -49,11 +48,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }  // rounds = 10
 
-    @Bean
-    public SimpleUrlAuthenticationFailureHandler authenticationFailureHandler(){
-        return new SimpleUrlAuthenticationFailureHandler();
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -62,14 +56,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .and()
-                //.authenticationEntryPoint(authenticationEntryPoint)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/login", "/auth/registration").permitAll()
                 .anyRequest().authenticated().and()
                 .apply(jwtConfigurer);
-               // .antMatchers("/api/admin/**").hasRole("ADMIN")
-
     }
 }

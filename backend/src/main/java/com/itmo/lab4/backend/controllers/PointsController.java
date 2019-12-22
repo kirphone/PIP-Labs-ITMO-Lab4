@@ -1,26 +1,19 @@
 package com.itmo.lab4.backend.controllers;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.itmo.lab4.backend.controllers.request.PointRequest;
 import com.itmo.lab4.backend.database.PointRepository;
 import com.itmo.lab4.backend.database.UserRepository;
 import com.itmo.lab4.backend.database.entities.PointEntity;
 import com.itmo.lab4.backend.database.entities.User;
 import com.itmo.lab4.backend.validators.PointRequestValidator;
-import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.stream.Collectors;
-
-import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController

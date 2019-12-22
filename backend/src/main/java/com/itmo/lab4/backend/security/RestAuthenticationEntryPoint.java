@@ -20,11 +20,9 @@ public class RestAuthenticationEntryPoint
             HttpServletResponse response,
             AuthenticationException authException) throws IOException {
 
-        //response.addHeader("WWW-Authenticate", "Basic realm=" + getRealmName() + "");
         if(authException instanceof UserAlreadyExistException){
             response.setStatus(HttpServletResponse.SC_CONFLICT);
         } else response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
 
 
         PrintWriter writer = response.getWriter();
