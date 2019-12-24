@@ -37,10 +37,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService()).passwordEncoder(encoder());
-                /*inMemoryAuthentication()
-                .withUser("admin").password(encoder().encode("admin")).roles("ADMIN")
-                .and()
-                .withUser("user").password(encoder().encode("user")).roles("USER");*/
     }
 
     @Bean
@@ -59,7 +55,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/login", "/auth/registration").permitAll()
                 .anyRequest().authenticated().and()
                 .apply(jwtConfigurer);
     }
